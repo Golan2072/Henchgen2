@@ -1,7 +1,7 @@
 # henchgenlib.py
 # A henchman generator for the Adventurer Conqueror King System (ACKS)
 # Library file.
-# v2.2, March 10th, 2020
+# v0.3, July 19th, 2020
 # This is open source code, feel free to use it for any purpose
 # contact me at golan2072@gmail.com
 
@@ -10,12 +10,18 @@ import random
 import stellagama
 import json
 
-# Templates
+# Lists
 warrior_template_list = ["thug", "thug", "thug", "mercenary", "mercenary", "hunter", "noble"]
 commoner_template_list = ["butcher", "barrister", "folk healer", "prostitute", "beggar", "preacher", "blacksmith",
                           "lumberjack", "alchemist", "houndmaster", "fortune teller", "ditch digger",
                           "grave digger", "jester", "jeweler", "merchant", "sailor", "miller", "minstrel",
                           "scribe"]
+
+general_proficiencies = ["Alchemy", "Animal Husbandry", "Animal Training", "Art", "Bargaining", "Caving", "Collegiate Wizardry",
+         "Craft", "Diplomacy", "Disguise", "Endurance", "Engineering", "Gambling", "Healing", "Intimidation",
+         "Knowledge", "Labor", "Language", "Leadership", "Lip Reading", "Manual of Arms", "Mapping",
+         "Military Strategy", "Mimicry", "Naturalism", "Navigation", "Performance", "Profession", "Riding", "Seafaring",
+         "Seduction", "Siege Engineering", "Signalling", "Survival", "Theology", "Tracking", "Trapping"]
 
 classed_templates = {}
 
@@ -116,8 +122,8 @@ def ability_gen(race):
 
 
 def class_gen(level, race, sex, abilities_dict):
-    if level == 0:
-        return random.choice(["peasant", random.choice(warrior_template_list), random.choice(warrior_template_list),
+    if race == "human" and level == 0:
+            return random.choice(["peasant", random.choice(warrior_template_list), random.choice(warrior_template_list),
                              random.choice(commoner_template_list)])
     elif level > 0:
         if race == "human":
@@ -216,29 +222,20 @@ def name_gen(sex):
         return "Tokay"
 
 
-def general_proficiency():
-    return random.choice(
-        ["Alchemy", "Animal Husbandry", "Animal Training", "Art", "Bargaining", "Caving", "Collegiate Wizardry",
-         "Craft", "Diplomacy", "Disguise", "Endurance", "Engineering", "Gambling", "Healing", "Intimidation",
-         "Knowledge", "Labor", "Language", "Leadership", "Lip Reading", "Manual of Arms", "Mapping",
-         "Military Strategy", "Mimicry", "Naturalism", "Navigation", "Performance", "Profession", "Riding", "Seafaring",
-         "Seduction", "Siege Engineering", "Signalling", "Survival", "Theology", "Tracking", "Trapping"])
-
-
 def generate_general_proficiency_list(level, intmod):
     proflist = []
     if level == 0:
         for i in range(0, 4):
-            proflist.append(general_proficiency())
+            proflist.append(random.choice(general_proficiencies))
         if intmod >= 1:
             for i in range(0, intmod):
-                proflist.append(general_proficiency())
+                proflist.append(random.choice(general_proficiencies))
     else:
         if intmod >= 1:
             for i in range(0, intmod + 1):
-                proflist.append(general_proficiency())
+                proflist.append(random.choice(general_proficiencies))
         else:
-            proflist = [general_proficiency()]
+            proflist = [random.choice(general_proficiencies)]
     return proflist
 
 

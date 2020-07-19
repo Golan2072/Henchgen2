@@ -1,9 +1,11 @@
-Mummified goblin hand
+Mummified hand
 Bag of marbles
 Firecracker
 Bottle of grog
 Raven skull
+Human skull
 Pocket knife
+Music box
 Nail clipper
 Ragged doll
 Wooden holy symbol
@@ -14,26 +16,33 @@ Cheap jewelry
 Bag of salt
 Shaving razor
 Steel mirror
+Silver mirror
 Dead cat
+Live cat
 Live rat
+Dead rat
+Mummified cat
+Mummified rat
 Dancing shoes
 Mechanical music box
 Smelly cheese
 Bread crumbs
 Tentacled figurine
+Toad figurine
+Rat figurine
 Broken dagger
 Dried frog
+Live frog
 Picture of imaginary friend
-Straw hat
 Winter coat
 Bottle of ink
 Urn of ashes
-Key of forgotten keys
+Ring of forgotten keys
 Tea set
 Silver whistle
 Coffin nails
 Moth-eaten cloths
-Stained scraf
+Stained scarf
 Faded uniform
 Broken figurine
 Wooden pipe
@@ -43,5 +52,21 @@ Incense stick
 Blood-stained handkerchief
 Slaver's switch
 Candy stick
-Meat cleaver
 Deck of cards
+Fake eye patch
+Bag of dice
+Backgammon set
+Chess set
+Broken manacles
+Bull whip
+Preserved finger
+Pet lizard
+Pet monkey
+Pet spider
+Pet cockroach
+Snake-skin boots
+Lizard-skin boots
+Hood
+Cape
+Bladed toy
+Rotting fish
