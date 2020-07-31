@@ -1,7 +1,7 @@
 # henchgenlib.py
 # A henchman generator for the Adventurer Conqueror King System (ACKS)
 # Library file.
-# v0.3, July 19th, 2020
+# v0.4, July 31st, 2020
 # This is open source code, feel free to use it for any purpose
 # contact me at golan2072@gmail.com
 
@@ -10,6 +10,12 @@ import random
 import stellagama
 import json
 
+# Load data files
+with open('npc_templates.json') as json_file:
+    npc_templates = json.load(json_file)
+with open('pc_templates.json') as json_file:
+    pc_templates = json.load(json_file)
+
 # Lists
 warrior_template_list = ["thug", "thug", "thug", "mercenary", "mercenary", "hunter", "noble"]
 commoner_template_list = ["butcher", "barrister", "folk healer", "prostitute", "beggar", "preacher", "blacksmith",
@@ -17,11 +23,17 @@ commoner_template_list = ["butcher", "barrister", "folk healer", "prostitute", "
                           "grave digger", "jester", "jeweler", "merchant", "sailor", "miller", "minstrel",
                           "scribe"]
 
-general_proficiencies = ["Alchemy", "Animal Husbandry", "Animal Training", "Art", "Bargaining", "Caving", "Collegiate Wizardry",
-         "Craft", "Diplomacy", "Disguise", "Endurance", "Engineering", "Gambling", "Healing", "Intimidation",
-         "Knowledge", "Labor", "Language", "Leadership", "Lip Reading", "Manual of Arms", "Mapping",
-         "Military Strategy", "Mimicry", "Naturalism", "Navigation", "Performance", "Profession", "Riding", "Seafaring",
-         "Seduction", "Siege Engineering", "Signalling", "Survival", "Theology", "Tracking", "Trapping"]
+npc_template_list = warrior_template_list + commoner_template_list
+npc_template_list.append("peasant")
+
+general_proficiencies = ["Alchemy", "Animal Husbandry", "Animal Training", "Art", "Bargaining", "Caving",
+                         "Collegiate Wizardry",
+                         "Craft", "Diplomacy", "Disguise", "Endurance", "Engineering", "Gambling", "Healing",
+                         "Intimidation",
+                         "Knowledge", "Labor", "Language", "Leadership", "Lip Reading", "Manual of Arms", "Mapping",
+                         "Military Strategy", "Mimicry", "Naturalism", "Navigation", "Performance", "Profession",
+                         "Riding", "Seafaring",
+                         "Seduction", "Siege Engineering", "Signalling", "Survival", "Theology", "Tracking", "Trapping"]
 
 classed_templates = {}
 
@@ -121,10 +133,20 @@ def ability_gen(race):
         return abilities
 
 
+def ability_modifiers(ability_dict):
+    ability_mod_dict = {"str": attribute_modifier(ability_dict["strength"]),
+                        "dex": attribute_modifier(ability_dict["dexterity"]),
+                        "con": attribute_modifier(ability_dict["constitution"]),
+                        "int": attribute_modifier(ability_dict["intelligence"]),
+                        "wis": attribute_modifier(ability_dict["wisdom"]),
+                        "cha": attribute_modifier(ability_dict["charisma"])}
+    return ability_mod_dict
+
+
 def class_gen(level, race, sex, abilities_dict):
     if race == "human" and level == 0:
-            return random.choice(["peasant", random.choice(warrior_template_list), random.choice(warrior_template_list),
-                             random.choice(commoner_template_list)])
+        return random.choice(["peasant", random.choice(warrior_template_list), random.choice(warrior_template_list),
+                              random.choice(commoner_template_list)])
     elif level > 0:
         if race == "human":
             if max(abilities_dict, key=abilities_dict.get) == "strength":
@@ -207,9 +229,9 @@ def class_gen(level, race, sex, abilities_dict):
             else:
                 return "burglar"
         else:
-            return "fighter"
+            return "peasant"
     else:
-        return "fighter"
+        return "peasant"
 
 
 def name_gen(sex):
@@ -222,10 +244,11 @@ def name_gen(sex):
         return "Tokay"
 
 
-def generate_general_proficiency_list(level, intmod):
+def prof_gen(level, charclass, intmod):
     proflist = []
     if level == 0:
-        for i in range(0, 4):
+        proflist += npc_templates[charclass]["proficiencies"]
+        for i in range(0, 2):
             proflist.append(random.choice(general_proficiencies))
         if intmod >= 1:
             for i in range(0, intmod):
@@ -237,6 +260,29 @@ def generate_general_proficiency_list(level, intmod):
         else:
             proflist = [random.choice(general_proficiencies)]
     return proflist
+
+
+def inventory_gen(level, charclass):
+    inventory = []
+    if level == 0:
+        armor = random.choice(npc_templates[charclass]["armor"])
+        if armor is not None:
+            inventory.append(armor)
+        else:
+            pass
+        weapon = random.choice(npc_templates[charclass]["weapons"])
+        if weapon is not None:
+            inventory.append(weapon)
+        else:
+            pass
+        items = random.choice(npc_templates[charclass]["items"])
+        if items is not None:
+            inventory.append(items)
+        else:
+            pass
+    else:
+        inventory = []
+    return inventory
 
 
 def hp_gen(charclass, ability_dict, level):
@@ -260,5 +306,19 @@ def hp_gen(charclass, ability_dict, level):
     if hp <= 0:
         hp = 1
     return hp
+
+
+def trinket_gen():
+    if stellagama.dice(1, 6) >= 5:
+        return stellagama.random_line("./data/trinkets.txt")
+    else:
+        pass
+
+
+def quirk_gen():
+    if stellagama.dice(1, 6) >= 5:
+        return stellagama.random_line("./data/quirks.txt")
+    else:
+        pass
 
 # Test Area

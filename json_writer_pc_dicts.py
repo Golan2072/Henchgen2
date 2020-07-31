@@ -2,7 +2,7 @@ import json
 
 pc_templates = {"desecrator": {"proficiencies": ['Dungeon Bashing', "Knowledge (occult)"],
                                "weapon": "befouled scourge, rusted ball and chain", "armor": "none",
-                               "items": "gnawed woodedn holy symbol"},
+                               "items": "gnawed wooden holy symbol"},
                 "tormentor": {"proficiencies": ['Combat Trickery (incapacitate)', "Profession (Torturer)"],
                               "weapon": "jagged battle axe", "armor": "black hide armor",
                               "items": "blackened wavy dagger (unholy symbol)"},
