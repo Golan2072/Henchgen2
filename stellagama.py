@@ -1,6 +1,6 @@
 # stellagama.py
 # A module with various useful functions by Omer Golan-Joel
-# v3.2 - March 7th, 2020
+# v3.3 - July 31st, 2020
 # This is open source code, feel free to use it for any purpose
 # contact me at golan2072@gmail.com
 
@@ -92,3 +92,10 @@ def list_stringer(input_list):
     for item in input_list:
         output_list.append(str(item))
     return ' '.join(output_list)
+
+
+def list_stringer_comma(input_list):
+    output_list = []
+    for item in input_list:
+        output_list.append(str(item))
+    return ', '.join(output_list)
