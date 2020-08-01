@@ -1,9 +1,14 @@
 #Henchgen2
 Henchman generator for the Adventurer Conqueror King System (ACKS).
 Character generator file.
-v0.4, July 31st, 2020
+v0.5, August 1st, 2020
 This is open source code, feel free to use it for any purpose.
 Contact the author at golan2072@gmail.com.
+
+v0.5, August 1st, 2020
+- Double proficiency selection is now handled correctly.
+- PC template names are implemented. Template data such as proficiencies and equipment still requires significant work.
+- Inventory now handled correctly.
 
 v0.4 July 31st, 2020
 - Level 0 characters fully implemented, including templates, starting equipment, and proficiencies.
