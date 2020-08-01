@@ -1,7 +1,7 @@
 # henchgenlib.py
 # A henchman generator for the Adventurer Conqueror King System (ACKS)
 # Library file.
-# v0.4, July 31st, 2020
+# v0.5, August 1st, 2020
 # This is open source code, feel free to use it for any purpose
 # contact me at golan2072@gmail.com
 
@@ -10,22 +10,62 @@ import random
 import stellagama
 import json
 
-# Load data files
-with open('npc_templates.json') as json_file:
-    npc_templates = json.load(json_file)
-with open('pc_templates.json') as json_file:
-    pc_templates = json.load(json_file)
-
-# Lists
+# Global lists and dictionaries
 warrior_template_list = ["thug", "thug", "thug", "mercenary", "mercenary", "hunter", "noble"]
 commoner_template_list = ["butcher", "barrister", "folk healer", "prostitute", "beggar", "preacher", "blacksmith",
                           "lumberjack", "alchemist", "houndmaster", "fortune teller", "ditch digger",
                           "grave digger", "jester", "jeweler", "merchant", "sailor", "miller", "minstrel",
                           "scribe"]
 
-npc_template_list = warrior_template_list + commoner_template_list
-npc_template_list.append("peasant")
-
+npc_template_list = warrior_template_list + commoner_template_list+["peasant"]
+pc_template_dict = {
+    "anti-paladin": ["desecrator", "tormentor", "deceiver", "corruptor", "slayer", "enforcer", "doombringer",
+                     "oppressor"],
+    "assassin": ["cutthroat", "bounty hunter", "pirate", "bravo", "assassin-for-hire", "betrayer", "infiltrator", "cult deathbringer"],
+    "barbarian": ["tribal warrior (Ivory Kingdoms)", "berserker (Jutland)", "sea rover (Jutland)",
+                  "skirmisher (Skysostan)", "death dealer (Jutland)", "pit fighter (Ivory Kingdoms)",
+                  "Housecarl (Jutland)", "Nomad (Skysostan"],
+    "bard": ["woodland piper", "charlatan", "swashbuckler", "wandering minstrel", "historian", "beguiler", "spy", "aristocrat"],
+    "bladedancer": ["warrior witch", "oracle dancer", "bringer of mercy", "bladesingress", "temple bladedancer", "veiled assassin", "consular", "warrior princess"],
+    "cleric": ["hermit", "prophet", "mendicant", "proselytizer", "priest", "undead slayer", "exorcist", "crusader"],
+    "craftpriest": ["outcast", "runeseer", "reliquary guardian", "documentarian", "reclaimer", "sacramentalist", "purifier", "seeker"],
+    "delver": ["survivalist", "prowler", "mountaineer", "tunnel runner", "pest controller", "treasure hunter", "vermin slayer", "patroller"],
+    "fury": ["foe eater", "dungeoneer", "belligerent", "warmonger", "tempest", "dirge marcher", "bloodboiler", "vengeful lord"],
+    "machinist": ["scavenger", "apothecary", "mechanic", "discoverer", "engineer", "artillerist", "war machinist", "artificer"],
+    "vaultguard": ["deserter", "battlerager", "sentinel", "clansdwarf", "goblin slayer", "axe bearer", "besieger", "highborn"],
+    "courtier": ["dilettante", "philanthropist", "colonizer", "rake", "scion", "socialite", "intriguer", "emissary"],
+    "enchanter": ["trickster", "charlatan", "occultist", "transmogrifier", "antiquarian", "siren", "militant", "patrician"],
+    "ranger": ["wanderer", "trapper", "mariner", "hunter", "woodland stalker", "scout", "falconer", "mounted archer"],
+    "spellsword": ["exile", "beastmaster", "dreadsword", "bladesinger", "swordmage", "flametongue", "captain", "winged knight"],
+    "nightblade": ["rogue", "pursuer", "antagonist", "duelist-for-hire", "silent slayer", "arcane avenger", "deceiver", "royal enforcer"],
+    "explorer": ["wanderer", "carthographer", "mariner", "pathfinder", "waylayer", "scout", "monster hunter", "outrider"],
+    "fighter": ["thug", "ravager", "corsair", "guardsman", "mercenary", "gladiator", "legionary", "lancer"],
+    "trickster": ["wastrel", "know-it-all", "tinker", "performer", "mummer", "jongleur", "voluptuary", "swindler"],
+    "mage": ["hedge wizard", "soothsayer", "necromancer", "elementalist", "magical scholar", "eunuch sorcerer", "warmage", "court magist"],
+    "mystic": ["ascetic", "yogi", "temple guard", "enlightened mind", "warrior monk", "cultist", "faith healer", "noble philosopher"],
+    "wonderworker": ["ferine", "augur", "corrupted soul", "servant of fire", "astrologer", "inceptor", "wrathbringer", "messiah"],
+    "paladin": ["errant", "gallant", "temple guardian", "champion", "foe hunter", "vanguard", "inquisitor", "templar"],
+    "priestess": ["anchorite", "oracle", "chantress", "medician", "sacred courtesan", "missionary", "lightbringer"],
+    "shaman": ["pariah", "wise man", "warchanter", "runecaster", "druid", "snake handler", "spirit raiser", "nomad shaman"],
+    "thief": ["outlaw", "thief-acrobat", "buccaneer", "tomb raider", "cat burglar", "lockbreaker", "failed apprentice", "traveller"],
+    "gladiator": ["runaway", "rampager", "beastfighter", "manhunter", "arena veteran", "prizefighter", "gladiator trainer", "slaver"],
+    "venturer": ["bankrupt", "factotum", "merchant mariner", "merchant traveller", "antiquary", "caravaneer", "comprador", "magnate"],
+    "warlock": ["pact witch", "changeling", "deranged alchemist", "defiler", "corrupt scholar", "diabolist", "destroyer", "scheming vizier"],
+    "witch": ["crone (antiquarian)", "dark oracle (chthonic)", "botono (voudon)", "lorelei (sylvan)", "village witch (antiquarian)", "death mistress (chthonic)", "fetishist (voudon)", "faerie princess (sylvan)"],
+    "ruinguard": ["flesheater", "hatemonger", "grimguard", "avenger", "doomwielder", "warmaster", "ruinbinder", "shadowcrown"],
+    "beastmaster": ["wolfpack runner"],
+    "berserker": ["bear-cult warrior"],
+    "chosen": ["inheritor"],
+    "spellsinger": ["sirenian"],
+    "freebooter": ["spelunker (Expeditionary path)"],
+    "bounder": ["kennelmaster"],
+    "burglar": ["rumormonger"],
+    "champion": ["warden (Ranger calling)"],
+    "wizard": ["servant of fire (Fellowship path)"],
+    "deathchanter": ["cryptchanter"],
+    "darklord": ["warlord"],
+    "warmistress": ["avenging angel"]
+}
 general_proficiencies = ["Alchemy", "Animal Husbandry", "Animal Training", "Art", "Bargaining", "Caving",
                          "Collegiate Wizardry",
                          "Craft", "Diplomacy", "Disguise", "Endurance", "Engineering", "Gambling", "Healing",
@@ -36,6 +76,12 @@ general_proficiencies = ["Alchemy", "Animal Husbandry", "Animal Training", "Art"
                          "Seduction", "Siege Engineering", "Signalling", "Survival", "Theology", "Tracking", "Trapping"]
 
 classed_templates = {}
+
+# Load data files
+with open('npc_templates.json') as json_file:
+    npc_templates = json.load(json_file)
+with open('pc_templates.json') as json_file:
+    pc_templates = json.load(json_file)
 
 
 # Functions
@@ -151,24 +197,24 @@ def class_gen(level, race, sex, abilities_dict):
         if race == "human":
             if max(abilities_dict, key=abilities_dict.get) == "strength":
                 return random.choice(["fighter", "fighter", "fighter", "assassin", "explorer", "anti-paladin"])
-            elif max(abilities_dict, key=abilities_dict.get) == "dexterity" and "Sex" == "male":
+            elif max(abilities_dict, key=abilities_dict.get) == "dexterity" and sex == "male":
                 return random.choice(["thief", "thief", "thief", "assassin", "freebooter"])
-            elif max(abilities_dict, key=abilities_dict.get) == "dexterity" and "Sex" == "female":
+            elif max(abilities_dict, key=abilities_dict.get) == "dexterity" and sex == "female":
                 return random.choice(["thief", "thief", "thief", "assassin", "freebooter", "warmistress"])
             elif max(abilities_dict, key=abilities_dict.get) == "constitution":
                 return random.choice(["barbarian", "mystic", "beastmaster", "berserker"])
             elif max(abilities_dict, key=abilities_dict.get) == "intelligence":
                 return random.choice(["mage", "warlock"])
-            elif max(abilities_dict, key=abilities_dict.get) == "wisdom" and "sex" == "female":
+            elif max(abilities_dict, key=abilities_dict.get) == "wisdom" and sex == "female":
                 return random.choice(
                     ["cleric", "cleric", "cleric", "cleric", "bladedancer", "priestess", "shaman", "witch"])
-            elif max(abilities_dict, key=abilities_dict.get) == "wisdom" and "sex" == "male":
+            elif max(abilities_dict, key=abilities_dict.get) == "wisdom" and sex == "male":
                 return random.choice(
                     ["cleric", "cleric", "cleric", "cleric", "shaman"])
             elif max(abilities_dict, key=abilities_dict.get) == "charisma":
-                return random.choice(["bard", "bard", "bard", "paladin", "venturer", "chosen"])
+                return random.choice(["bard", "bard", "bard", "paladin", "paladin", "venturer", "venturer", "venturer", "chosen"])
             else:
-                return "chosen"
+                return "fighter"
         elif race == "dwarven":
             if max(abilities_dict, key=abilities_dict.get) == "strength":
                 return random.choice(["vaultguard", "vaultguard", "vaultguard", "fury"])
@@ -234,6 +280,10 @@ def class_gen(level, race, sex, abilities_dict):
         return "peasant"
 
 
+def template_gen(charclass):
+    return random.choice(pc_template_dict[charclass])
+
+
 def name_gen(sex):
     name = ""
     if sex == "male":
@@ -259,7 +309,30 @@ def prof_gen(level, charclass, intmod):
                 proflist.append(random.choice(general_proficiencies))
         else:
             proflist = [random.choice(general_proficiencies)]
-    return proflist
+    final_profs=[]
+    for proficiency in proflist:
+        if proficiency in ["Alchemy", "Animal Husbandry", "Animal Training", "Art", "Bargaining", "Craft", "Engineering", "Healing", "Performance", "Language", "Profession", "Riding", "Siege Engineering", "Weapon Focus"]:
+            if proficiency in final_profs:
+                final_profs.remove(proficiency)
+                final_profs.append(proficiency + " 2")
+            elif proficiency + " 2" in final_profs:
+                final_profs.remove(proficiency + " 2")
+                final_profs.append(proficiency + " 3")
+            elif proficiency + " 3" in final_profs:
+                final_profs.remove(proficiency + " 3")
+                final_profs.append(proficiency + " 4")
+            else:
+                final_profs.append(random.choice(general_proficiencies))
+        else:
+            if proficiency in final_profs:
+                final_profs.append(random.choice(general_proficiencies))
+                if proficiency in final_profs:
+                    final_profs.append(random.choice(general_proficiencies))
+                else:
+                    final_profs.append(proficiency)
+            else:
+                final_profs.append(proficiency)
+    return final_profs
 
 
 def inventory_gen(level, charclass):
