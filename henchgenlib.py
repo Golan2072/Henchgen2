@@ -1,7 +1,7 @@
 # henchgenlib.py
 # A henchman generator for the Adventurer Conqueror King System (ACKS)
 # Library file.
-# v0.5, August 1st, 2020
+# v0.6, August 2nd, 2020
 # This is open source code, feel free to use it for any purpose
 # contact me at golan2072@gmail.com
 
@@ -64,16 +64,17 @@ pc_template_dict = {
     "wizard": ["servant of fire (Fellowship path)"],
     "deathchanter": ["cryptchanter"],
     "darklord": ["warlord"],
-    "warmistress": ["avenging angel"]
+    "warmistress": ["avenging angel"],
+    "sorcerer": ["dark sorcerer"]
 }
-general_proficiencies = ["Alchemy", "Animal Husbandry", "Animal Training", "Art", "Bargaining", "Caving",
+general_proficiencies = ("Alchemy", "Animal Husbandry", "Animal Training", "Art", "Bargaining", "Caving",
                          "Collegiate Wizardry",
                          "Craft", "Diplomacy", "Disguise", "Endurance", "Engineering", "Gambling", "Healing",
                          "Intimidation",
                          "Knowledge", "Labor", "Language", "Leadership", "Lip Reading", "Manual of Arms", "Mapping",
                          "Military Strategy", "Mimicry", "Naturalism", "Navigation", "Performance", "Profession",
                          "Riding", "Seafaring",
-                         "Seduction", "Siege Engineering", "Signalling", "Survival", "Theology", "Tracking", "Trapping"]
+                         "Seduction", "Siege Engineering", "Signalling", "Survival", "Theology", "Tracking", "Trapping")
 
 classed_templates = {}
 
@@ -86,7 +87,7 @@ with open('pc_templates.json') as json_file:
 
 # Functions
 def attribute_modifier(attribute):
-    modlib = [0, -3, -3, -3, -2, -2, -1, -1, -1, 0, 0, 0, 0, 1, 1, 1, 2, 2, 3]
+    modlib = (0, -3, -3, -3, -2, -2, -1, -1, -1, 0, 0, 0, 0, 1, 1, 1, 2, 2, 3)
     return modlib[attribute]
 
 
@@ -312,15 +313,10 @@ def prof_gen(level, charclass, intmod):
     final_profs=[]
     for proficiency in proflist:
         if proficiency in ["Alchemy", "Animal Husbandry", "Animal Training", "Art", "Bargaining", "Craft", "Engineering", "Healing", "Performance", "Language", "Profession", "Riding", "Siege Engineering", "Weapon Focus"]:
+            n = 2
             if proficiency in final_profs:
                 final_profs.remove(proficiency)
                 final_profs.append(proficiency + " 2")
-            elif proficiency + " 2" in final_profs:
-                final_profs.remove(proficiency + " 2")
-                final_profs.append(proficiency + " 3")
-            elif proficiency + " 3" in final_profs:
-                final_profs.remove(proficiency + " 3")
-                final_profs.append(proficiency + " 4")
             else:
                 final_profs.append(random.choice(general_proficiencies))
         else:

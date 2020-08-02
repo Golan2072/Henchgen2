@@ -1,7 +1,7 @@
 # henchgenchar.py
 # Henchman generator for the Adventurer Conqueror King System (ACKS).
 # Character generator file.
-# v0.5, August 1st, 2020
+# v0.6, August 2nd, 2020
 # This is open source code, feel free to use it for any purpose.
 # Contact the author at golan2072@gmail.com.
 
@@ -42,23 +42,35 @@ class Character:
         self.proficiency_string = stellagama.list_stringer_comma(self.proficiencies)
         self.inventory_string = stellagama.list_stringer_comma(self.inventory)
         self.quirk = henchgenlib.quirk_gen()
-
+    def string_output(self):
+            if self.level > 1:
+                output = str((
+                    f"{self.name}, level {self.level} {self.sex} {self.race} {self.charclass} ({self.template}), {self.hp} HP\n{self.abilities['strength']} DEX: {self.abilities['dexterity']} CON: {self.abilities['constitution']} INT: {self.abilities['intelligence']} WIS: {self.abilities['wisdom']} CHA: {self.abilities['charisma']}\nInventory: {self.inventory_string}\nProficiencies: {self.proficiency_string}"))
+            else:
+                output = str((
+                    f"{self.name}, level {self.level} {self.sex} {self.race} {self.charclass}, {self.hp} HP\n{self.abilities['strength']} DEX: {self.abilities['dexterity']} CON: {self.abilities['constitution']} INT: {self.abilities['intelligence']} WIS: {self.abilities['wisdom']} CHA: {self.abilities['charisma']}\nInventory: {self.inventory_string}\nProficiencies: {self.proficiency_string}"))
+            if self.quirk is not None:
+                output+=(f"\n{self.quirk}")
+            else:
+                pass
+            return output
+    def list_output(self):
+            if self.level >1:
+                output =[self.name, self.level, self.sex, self.race, self.charclass, self.template, self.hp, self.abilities['strength'], self.abilities['dexterity'], self.abilities['constitution'], self.abilities['intelligence'], self.abilities['wisdom'], self.abilities['charisma'], self.inventory_string, self.proficiency_string]
+            else:
+                output = [self.name, self.level, self.sex, self.race, self.charclass, self.hp,
+                          self.abilities['strength'], self.abilities['dexterity'], self.abilities['constitution'],
+                          self.abilities['intelligence'], self.abilities['wisdom'], self.abilities['charisma'],
+                          self.inventory_string, self.proficiency_string]
+            if self.quirk is not None:
+                output.append(self.quirk)
+            else:
+                pass
+            return output
 
 # test area
 
-for i in range(1, 101):
-    character = Character(0)
-    if character.level >1:
-        print(f"{character.name}, level {character.level} {character.sex} {character.race} {character.charclass} ({character.template}), {character.hp} HP")
-    else:
-        print(
-            f"{character.name}, level {character.level} {character.sex} {character.race} {character.charclass}, {character.hp} HP")
-    print(
-        f"STR: {character.abilities['strength']} DEX: {character.abilities['dexterity']} CON: {character.abilities['constitution']} INT: {character.abilities['intelligence']} WIS: {character.abilities['wisdom']} CHA: {character.abilities['charisma']}")
-    print("Inventory:", character.inventory_string)
-    print("Proficiencies:", character.proficiency_string)
-    if character.quirk is not None:
-        print(character.quirk)
-    else:
-        pass
+for i in range(1, 1001):
+    character = Character(1)
+    print(character.string_output())
     print("")
