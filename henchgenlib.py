@@ -1,7 +1,7 @@
 # henchgenlib.py
 # A henchman generator for the Adventurer Conqueror King System (ACKS)
 # Library file.
-# v0.6, August 2nd, 2020
+# v0.7, August 4th, 2020
 # This is open source code, feel free to use it for any purpose
 # contact me at golan2072@gmail.com
 
@@ -197,23 +197,23 @@ def class_gen(level, race, sex, abilities_dict):
     elif level > 0:
         if race == "human":
             if max(abilities_dict, key=abilities_dict.get) == "strength":
-                return random.choice(["fighter", "fighter", "fighter", "assassin", "explorer", "anti-paladin"])
+                return random.choice(["fighter", "fighter", "fighter", "fighter", "fighter", "fighter", "fighter", "fighter", "assassin", "explorer", "anti-paladin"])
             elif max(abilities_dict, key=abilities_dict.get) == "dexterity" and sex == "male":
-                return random.choice(["thief", "thief", "thief", "assassin", "freebooter"])
+                return random.choice(["thief", "thief", "thief", "thief", "thief", "thief", "assassin", "freebooter"])
             elif max(abilities_dict, key=abilities_dict.get) == "dexterity" and sex == "female":
-                return random.choice(["thief", "thief", "thief", "assassin", "freebooter", "warmistress"])
+                return random.choice(["thief", "thief", "thief", "thief", "thief", "thief", "assassin", "freebooter", "warmistress"])
             elif max(abilities_dict, key=abilities_dict.get) == "constitution":
-                return random.choice(["barbarian", "mystic", "beastmaster", "berserker"])
+                return random.choice(["barbarian", "barbarian", "fighter", "fighter", "fighter", "mystic", "fighter", "fighter", "beastmaster", "berserker"])
             elif max(abilities_dict, key=abilities_dict.get) == "intelligence":
-                return random.choice(["mage", "warlock"])
+                return random.choice(["mage", "mage", "mage", "mage", "mage", "warlock"])
             elif max(abilities_dict, key=abilities_dict.get) == "wisdom" and sex == "female":
                 return random.choice(
-                    ["cleric", "cleric", "cleric", "cleric", "bladedancer", "priestess", "shaman", "witch"])
+                    ["cleric", "cleric", "cleric", "cleric", "cleric", "cleric", "bladedancer", "bladedancer", "bladedancer", "priestess", "shaman", "witch"])
             elif max(abilities_dict, key=abilities_dict.get) == "wisdom" and sex == "male":
                 return random.choice(
-                    ["cleric", "cleric", "cleric", "cleric", "shaman"])
+                    ["cleric", "cleric", "cleric", "cleric", "cleric", "cleric", "cleric", "shaman"])
             elif max(abilities_dict, key=abilities_dict.get) == "charisma":
-                return random.choice(["bard", "bard", "bard", "paladin", "paladin", "venturer", "venturer", "venturer", "chosen"])
+                return random.choice(["bard", "bard", "bard", "bard", "bard", "bard", "paladin", "paladin", "venturer", "chosen"])
             else:
                 return "fighter"
         elif race == "dwarven":
@@ -235,7 +235,7 @@ def class_gen(level, race, sex, abilities_dict):
             elif max(abilities_dict, key=abilities_dict.get) == "charisma":
                 return random.choice(["courtier", "enchanter"])
             elif max(abilities_dict, key=abilities_dict.get) == "intelligence":
-                return "spellsinger"
+                return random.choice(["spellsword", "spellsword", "spellsinger", "nightblade", "nightblade"])
             else:
                 return "spellsword"
         elif race == "gnome":
@@ -322,12 +322,9 @@ def prof_gen(level, charclass, intmod):
         else:
             if proficiency in final_profs:
                 final_profs.append(random.choice(general_proficiencies))
-                if proficiency in final_profs:
-                    final_profs.append(random.choice(general_proficiencies))
-                else:
-                    final_profs.append(proficiency)
             else:
                 final_profs.append(proficiency)
+    final_profs.sort()
     return final_profs
 
 
@@ -379,14 +376,14 @@ def hp_gen(charclass, ability_dict, level):
 
 def trinket_gen():
     if stellagama.dice(1, 6) >= 5:
-        return stellagama.random_line("./data/trinkets.txt")
+        return stellagama.random_line("./data/trinkets.txt").lower()
     else:
         pass
 
 
 def quirk_gen():
     if stellagama.dice(1, 6) >= 5:
-        return stellagama.random_line("./data/quirks.txt")
+        return stellagama.random_line("./data/quirks.txt").lower()
     else:
         pass
 
